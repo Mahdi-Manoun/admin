@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Dashboard using HTML, CSS and JavaScript</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrious/dist/qrious.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <!-- Add these to your head section -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+       
+        .form-container {
+            display: none;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 800px;
+            /* max-width: 600px; */
+            border: 1px solid #ddd;
+            position: relative;
+            left: 400px;
+            bottom: 260px;
+
+        }
+
+        .form-container h3 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #2c3e50;
+            font-size: 24px;
+            font-weight: 600;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .form-container input,
+        .form-container select,
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-container input[type="checkbox"] {
+            width: auto;
+        }
+
+        .form-container label {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+            color: #6a11cb;
+        }
+
+        .form-container button {
+            color: black;
+            border: none;
+            cursor: pointer;
+        }
+
+
+        #decrementBtn {
+            display: inline-block;  /* Ensure the button is displayed */
+            padding: 10px 20px;
+            margin-top: 10px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+          }
+
+        #decrementBtn:hover {
+            background-color: #0056b3;
+        }
+
+       
+        #addProductBtn {
+            padding: 15px 30px;
+            color: white;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            border: 2px solid #6a11cb; 
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            position: relative;
+            top: 40px;
+            transition: border 0.3s ease;
+        }
+
+        #productBtn{
+            padding: 15px 30px;
+            color: white;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            border: 2px solid #6a11cb; 
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border 0.3s ease;
+        }
+
+        #productBtnn{
+            padding: 15px 30px;
+            color: white;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            border: 2px solid #6a11cb; 
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border 0.3s ease;
+            position: relative;
+            top: 80px;
+        }
+        #productBtn2{
+            padding: 15px 30px;
+            color: white;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            border: 2px solid #6a11cb; 
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border 0.3s ease;
+            position: relative;
+            top: 120px;
+        }
+
+        .submit-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .submit-container button {
+            width: auto; 
+            padding: 10px 30px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .close-form {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #555;
+            font-weight: bold;
+            z-index: 10;
+            transition: color 0.3s ease;
+        }
+
+        .close-form:hover {
+            color: #e74c3c;
+        }
+
+
+
+        @media (max-width: 768px) {
+            .form-container {
+                width: 90%;
+            }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-box {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            width: 300px;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        #productTable {
+            width: 90%;
+            margin: 30px auto;
+            border-collapse: separate;
+            border-spacing: 0;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+
+#productTable th {
+    color: #333;
+    text-align: left;
+    padding: 15px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    border-bottom: 2px solid #ddd;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    background-color: transparent;
+}
+
+
+#productTable td {
+    padding: 18px 20px;
+    font-size: 14px;
+    color: #555;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+
+#productTable tr:hover {
+    background-color: #f8f9fc;
+    transition: background-color 0.3s ease;
+}
+
+
+#productTable img {
+    max-width: 80px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+
+#productTable .action-btns {
+    display: flex;
+    justify-content: flex-start;
+    gap: 12px;
+}
+
+#productTable .action-btns button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #6c757d;
+    transition: transform 0.2s ease, color 0.3s ease;
+}
+
+#productTable .action-btns .update-btn:hover {
+    color: #0d6efd;
+    transform: scale(1.2);
+}
+
+#productTable .action-btns .delete-btn:hover {
+    color: #dc3545;
+    transform: scale(1.2);
+}
+
+/* QR code canvas hover */
+canvas[title="Click to simulate scan"] {
+    transition: transform 0.2s ease;
+}
+
+canvas[title="Click to simulate scan"]:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+}
+
+
+@media (max-width: 768px) {
+    #productTable {
+        width: 100%;
+    }
+
+    #productTable th, #productTable td {
+        padding: 12px 10px;
+        font-size: 13px;
+    }
+
+    #productTable img {
+        max-width: 60px;
+    }
+}
+</style>
+</head>
+
+<body>
+    
+   
+    <div class="container">
+        <aside>
+            <div class="top">
+                <!--<div class="logo">
+                    <img src="images/logo.svg" alt="">
+                    <h2 class="text-muted">NEOLINT</h2>
+                </div>-->
+                <div class="close" id="btn-close">
+                    <span class="material-icons-sharp">
+                        close
+                    </span>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <!--- <a href="#">
+                    <span class="material-icons-sharp">
+                        dashboard
+                    </span>
+                    <h3>Dashboard</h3>
+                </a>-->
+
+                <!-- <a href="#" class="actived">
+                    <span class="material-icons-sharp">
+                        person_outline
+                    </span>
+                    <h3>Customers</h3>
+                </a>
+                <a href="#">
+                    <span class="material-icons-sharp">
+                        receipt_long
+                    </span>
+                    <h3>Orders</h3>
+                </a>
+                <a href="#">
+                    <span class="material-icons-sharp">
+                        insights
+                    </span>
+                    <h3>Analytics</h3>
+                </a>
+                <a href="#">
+                    <span class="material-icons-sharp">
+                        mail_outline
+                    </span>
+                    <h3>Messagers</h3>
+                    <span class="message-count">27</span>
+                </a>-->
+                <!--<a href="#">
+                    <span class="material-icons-sharp">
+                        inventory
+                    </span>
+                    </a>-->
+                    <input id="qrScannerInput" placeholder="Scan QR here" style="position:absolute; top:-1000px;" autofocus />
+                    <!--<button id="productBtn">Products</button>-->
+                
+                <!--<a href="#">
+                    <span class="material-icons-sharp">
+                        report_gmailerrorred
+                    </span>
+                    <h3>Reports</h3>
+                </a>
+                <a href="#">
+                    <span class="material-icons-sharp">
+                        settings
+                    </span>
+                    <h3>Settings</h3>
+                </a>-->
+                <!--<a href="#">-->
+                <!--<span class="material-icons-sharp">
+                        add
+                    </span>-->
+                <button id="addProductBtn">Add Product</button>
+               <button  id="productBtnn" onclick="logout()">Logout</button>
+               <button onclick="showProductTable()" id="productBtn2">Update</button>
+
+                <div class="form-container" id="productForm" style="display: none;">
+                    <span class="close-form" id="closeFormBtn">&times;</span> 
+                    <h3>Add Product Details</h3>
+                    <form id="productFormFields">
+
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" placeholder="Product"><br>
+
+                        <label for="price">Price:</label>
+                        <input type="number" id="price" name="price" placeholder="10"><br>
+
+                        <label for="description">Description:</label>
+                        <input type="text" id="description" name="description"
+                            placeholder="This is a sample product description"><br>
+
+                        <label for="category_id">Category:</label>
+                        <select id="category_id" name="category_id">
+                            <option value="">Select Category</option>
+                            <!--<option value="1">Category 1</option>
+                            <option value="2">Category 2</option>
+                            <option value="3">Category 3</option>-->
+                        </select><br>
+
+                        <!-- Inventory Section -->
+                        <div class="inventory-container" id="inventoryContainer">
+                            <!--<h4>Inventory</h4>-->
+                            <!-- Dynamic inventory fields will go here -->
+                        </div>
+
+                        <!-- Images Section -->
+                        <div class="images-container" id="imagesContainer">
+                            <!--<h4>Images</h4>-->
+                            <!-- Dynamic image fields will go here -->
+                        </div>
+                        
+                            <div class="submit-container">
+                                <button type="button" id="submitProductBtn">Add Product</button> <!-- Add Product button -->
+                                <button type="button" onclick="bindUpdateButton()" id="updateProductBtn" >Update Product</button> <!-- Update Product button -->
+                            </div>
+                       
+                    </form>
+                </div>
+                
+                <!--</a>-->
+
+                <!--<a href="#">
+                    <span class="material-icons-sharp">
+                        logout
+                    </span>
+                    <h3>Logoutt</h3>
+
+                </a>-->
+                
+            </div>
+            <div id="reader" style="width: 300px; margin: 20px auto;"></div>
+
+              <table id="productTable" style="display: none;">
+                <thead>
+                  <tr>
+                    <th>Image</th>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead> 
+                <tbody id="productListContainer"></tbody>
+              </table>
+        </aside>
+
+
+        <!--<main>
+            <h1>Dashboard</h1>
+
+            <div class="date">
+                <input type="date">
+            </div>
+
+            <div class="insights">
+                <div class="sales">
+                    <span class="material-icons-sharp">analytics</span>
+                    <div class="middle">
+                        <div class="left">
+                            <h3>Total Sales</h3>
+                            <h1>$25,024</h1>
+                        </div>
+                        <div class="progress">
+                            <svg>
+                                <circle cx="38" cy="38" r="36" stroke-dashoffset="42.56" />
+                            </svg>
+                            <div class="number">
+                                <p>81%</p>
+                            </div>
+                        </div>
+                    </div>
+                    <small class="text-muted">Last 24 Hours</small>
+                </div>-->
+        <!---------  END OF SALES   --------->
+        <!--<div class="expenses">
+                    <span class="material-icons-sharp">bar_chart</span>
+                    <div class="middle">
+                        <div class="left">
+                            <h3>Total Expenses</h3>
+                            <h1>$27,174</h1>
+                        </div>
+                        <div class="progress">
+                            <svg>
+                                <circle cx="38" cy="38" r="36" stroke-dashoffset="85" />
+                            </svg>
+                            <div class="number">
+                                <p>62%</p>
+                            </div>
+                        </div>
+                    </div>
+                    <small class="text-muted">Last 24 Hours</small>
+                </div>-->
+        <!---------  END OF EXPENSES   --------->
+        <!--<div class="income">
+                    <span class="material-icons-sharp">stacked_line_chart</span>
+                    <div class="middle">
+                        <div class="left">
+                            <h3>Total Income</h3>
+                            <h1>$11,270</h1>
+                        </div>
+                        <div class="progress">
+                            <svg>
+                                <circle cx="38" cy="38" r="36" stroke-dashoffset="125.44" />
+                            </svg>
+                            <div class="number">
+                                <p>44%</p>
+                            </div>
+                        </div>
+                    </div>
+                    <small class="text-muted">Last 24 Hours</small>
+                </div>-->
+        <!---------  END OF INCOME   --------->
+        <!--</div>-->
+        <!---------  END OF INSIGHTS   --------->
+
+        <!--<div class="recent-orders">
+                <h2>Recent Orders</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Product Number</th>
+                            <th>Payment</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Iphone 12</td>
+                            <td>23242526</td>
+                            <td>Due</td>
+                            <td class="warning">Pending</td>
+                            <td class="primary">Details</td>
+                        </tr>
+                        <tr>
+                            <td>Iphone 12</td>
+                            <td>23242526</td>
+                            <td>Due</td>
+                            <td class="warning">Pending</td>
+                            <td class="primary">Details</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <a href="#">Show More</a>
+            </div>-->
+        <!---------  END OF RECENT ORDER   --------->
+
+        <!--</main>-->
+        <!---------  END OF MAIN   --------->
+
+        <div class="right">
+            <div class="top">
+                <button id="btn-menu">
+                    <!--<span class="material-icons-sharp">
+                        menu
+                    </span>-->
+                </button>
+                <div class="theme-toggler">
+                    <!--<span class="material-icons-sharp actived">
+                        light_mode
+                    </span>-->
+                    <!--<span class="material-icons-sharp">
+                        dark_mode
+                    </span>-->
+                </div>
+                <!--<div class="profile">
+                    <div class="info">
+                        <p>Hey, <b>Rogerio</b></p>
+                        <div class="text-muted">Admin</div>
+                    </div>-->
+                <!--<div class="profile-photo">
+                        <img src="https://avatars.githubusercontent.com/u/5283648?s=40&v=4" alt="Admin">
+                    </div>
+                </div>-->
+            </div>
+            <!---------  END OF TOP   --------->
+
+            <div class="recent-updates">
+                <!--<h2>Recent Updates</h2>-->
+                <!--<div class="updates">
+                    <div class="update">
+                        <div class="profile-photo">
+                            <img src="./images/001.png" alt="">
+                        </div>-->
+                <!--<div class="message">
+                            <p><b>Ramuh Lino</b> received his order of Night lion tech GPS drobe.</p>-->
+                <!--<small>3 Minutes Ago</small>
+                        </div>
+                    </div>-->
+
+                <!-- <div class="update">
+                        <div class="profile-photo">
+                            <img src="./images/002.jpg" alt="">
+                        </div>
+                        <div class="message">
+                            <p><b>Ramuh Lino</b> received his order of Night lion tech GPS drobe.</p>
+                            <small>3 Minutes Ago</small>
+                        </div>
+                    </div> -->
+            </div>
+        </div>
+        <!---------  END OF RECENT-UPDATES  --------->
+
+        <!--<div class="sales-analytics">
+                <h2>Sales Analytics</h2>
+                <div class="item online">
+                    <div class="icon">
+                        <span class="material-icons-sharp">
+                            shopping_cart
+                        </span>
+                    </div>
+                    <div class="right">
+                        <div class="info">
+                            <h3>ONLINE ORDERS</h3>
+                            <small class="text-muted">Last 24 Hours</small>
+                        </div>
+                        <h5 class="success">+39%</h5>
+                        <h3>3480</h3>
+                    </div>
+                </div> -->
+
+        <!--<div class="item offline">
+                    <div class="icon">
+                        <span class="material-icons-sharp">
+                            local_mall
+                        </span>
+                    </div>
+                    <div class="right">
+                        <div class="info">
+                            <h3>OFFLINE ORDERS</h3>
+                            <small class="text-muted">Last 24 Hours</small>
+                        </div> 
+                         <h5 class="warning">+23%</h5>
+                        <h3>1380</h3>
+                    </div>
+                </div>-->
+
+        <!--<div class="item customers">
+                    <div class="icon">
+                        <span class="material-icons-sharp">
+                            person
+                        </span>
+                    </div>-->
+        <!-- <div class="right">
+                        <div class="info">
+                            <h3>NEW CUSTOMERS</h3>
+                            <small class="text-muted">Last 24 Hours</small>
+                        </div>
+                        <h5 class="success">+27%</h5>
+                        <h3>1380</h3>
+                    </div> 
+                </div>-->
+
+        <!--<div class="item add-product">
+                    <span class="material-icons-sharp">
+                        add
+                    </span>
+                    <button id="addProductBtn">Add Product</button>
+    </div>
+    </div>
+
+    </div>
+
+    </div>-->
+   
+    <span class="aside-overview"></span>
+    <script>window.addEventListener('load', function () {
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+        // If not logged in, redirect to 404.html
+        if (isLoggedIn !== "true") {
+            window.location.href = "404.html";
+        }
+    });</script>
+  
+
+
+  <script>
+    function showProductTable() {
+      document.getElementById("productTable").style.display = "table";
+      loadProducts(); // assuming this function is also globally defined
+    }
+    </script>
+       
+        
+    <script src="admin.js"></script>
+    <script src="login.js"></script>
+    
+</body>
+
+</html>

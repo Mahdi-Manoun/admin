@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Info</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .product-info {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            display: inline-block;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            display: none; 
+        }
+        .button:hover {
+            background-color: #ff1a1a;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Product Information</h1>
+    <div class="product-info" id="product-info">
+       
+       
+        <p id="product-name"></p>
+        <p id="product-color"></p>
+        <button class="button" id="decrement-btn" style="display:none;">Delete</button>
+    </div>
+
+    <script>
+        // Handle the "Delete" button click to decrement the product's quantity
+        async function handleDecrement() {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+        alert("Authentication token missing. Please log in.");
+        return;
+    }
+
+    const productName = document.getElementById('product-name').innerText.replace("Product: ", "").trim();
+
+    /*const colorName = document.getElementById('product-color').innerText;*/
+
+    try {
+        const [productRes, colorRes] = await Promise.all([
+            fetch("http://localhost:5000/api/products"),
+            fetch("http://localhost:5000/api/colors")
+        ]);
+
+        const productData = await productRes.json();
+        const colorData = await colorRes.json();
+
+        const products = productData.data || [];
+        const colors = colorData.data || [];
+
+        const product = products.find(p => p.name.toLowerCase() === productName.toLowerCase());
+
+        const color = colors.find(c => c.name.toLowerCase() === colorName.toLowerCase());
+
+        console.log("Found Product:", product);
+        console.log("Found Color:", color);
+
+        if (!product || !color) {
+            alert("Product or color not found");
+            return;
+        }
+
+        const patchUrl = `http://localhost:5000/api/products/inventory/${product.id}/${color.id}/1`;
+
+        console.log("PATCH URL:", patchUrl);  // Debugging the URL
+
+        const patchResponse = await fetch(patchUrl, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({ decrement: 1 })
+        });
+
+        const responseText = await patchResponse.text();
+        console.log("PATCH response status:", patchResponse.status);
+        console.log("PATCH response body:", responseText);
+
+        if (!patchResponse.ok) {
+            alert("Failed to decrement quantity.");
+            return;
+        }
+
+        alert("Quantity decremented successfully!");
+    } catch (error) {
+        console.error("Error during quantity decrement:", error);
+        alert("Error processing the decrement.");
+    }
+}
+
+        // This function will set the product details based on the QR scan result
+        function displayProductInfo(productName, colorName) {
+            const productNameElement = document.getElementById('product-name');
+            const productColorElement = document.getElementById('product-color');
+            const decrementButton = document.getElementById('decrement-btn');
+            
+            // Ensure the product name and color are displayed
+            productNameElement.innerText = `Product: ${productName}`;
+            productColorElement.innerText = `Color: ${colorName}`;
+            
+            // Add an event listener to the "Delete" button to handle the decrement
+            decrementButton.addEventListener('click', handleDecrement);
+
+            // Ensure the button is visible
+            decrementButton.style.display = 'block';
+        }
+
+        // Parse the QR code data from the URL parameters and call displayProductInfo with it
+        const urlParams = new URLSearchParams(window.location.search);
+        const name = urlParams.get('name');
+        /*const color = urlParams.get('color');*/
+
+        if (name && color) {
+            displayProductInfo(name, color);
+        } else {
+            alert("Invalid product information.");
+        }
+
+       async function handleScan(productName, colorName) {
+    console.log("Handling scan for product:", productName, "and color:", colorName);
+
+    try {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+            alert("Authentication token missing. Please log in.");
+            return;
+        }
+
+        // Fetch product and color data
+        const [productRes, colorRes] = await Promise.all([
+            fetch("http://localhost:5000/api/products"),
+            fetch("http://localhost:5000/api/colors")
+        ]);
+
+        const productData = await productRes.json();
+        const colorData = await colorRes.json();
+
+        const products = productData.data || [];
+        const colors = colorData.data || [];
+
+        // Debugging: log the fetched data
+        console.log("Fetched Products:", products);
+        console.log("Fetched Colors:", colors);
+
+        // Normalize the color names to lowercase for comparison
+        const product = products.find(p => p.name.toLowerCase() === productName.toLowerCase());
+        const color = colors.find(c => c.name.toLowerCase() === colorName.toLowerCase());
+
+        console.log("Found Product:", product);
+        console.log("Found Color:", color);
+
+        if (!product || !color) {
+            alert("Product or color not found");
+            return;
+        }
+
+        // Display product information and show delete button
+        displayProductInfo(product.name, color.name);
+
+        // Proceed with PATCH request to decrement quantity (as needed)
+        const patchUrl = `http://localhost:5000/api/products/inventory/${product.id}/${color.id}/1`;
+        console.log("PATCH URL:", patchUrl);
+
+        const patchResponse = await fetch(patchUrl, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({ decrement: 1 })
+        });
+
+        const responseText = await patchResponse.text();
+        console.log("PATCH response status:", patchResponse.status);
+        console.log("PATCH response body:", responseText);
+
+        if (!patchResponse.ok) {
+            alert("Failed to decrement quantity.");
+            return;
+        }
+
+        alert("Quantity decremented successfully!");
+    } catch (error) {
+        console.error("Error processing scan:", error);
+        alert("Error processing the scan.");
+    }
+}
+
+    </script>
+
+</body>
+</html>
